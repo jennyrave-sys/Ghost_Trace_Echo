@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jennyrave Ghost Trace Echo | Precision Delay</title>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-main: #2a2a2a;
+            --text-sub: #666d75;
+            --accent-orange: #ff4400;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px 40px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 900;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-sub);
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        .accent-line {
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent-orange);
+            margin: 20px auto;
+        }
+
+        .product-showcase {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center;
+            margin-bottom: 40px;
+            border: 1px solid var(--border-color);
+        }
+
+        .product-showcase img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            border: 1px solid #111;
+            border-bottom: 4px solid var(--accent-orange);
+            background-color: #111;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
+        }
+
+        section {
+            background: var(--card-bg);
+            padding: 40px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-orange);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 0;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            color: var(--accent-orange);
+            margin-top: 25px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        p {
+            color: var(--text-sub);
+            margin-bottom: 15px;
+        }
+
+        ul {
+            color: var(--text-sub);
+            padding-left: 0;
+            list-style-type: none;
+        }
+
+        li {
+            margin-bottom: 12px;
+            padding-left: 0;
+            border-left: none;
+        }
+
+        strong {
+            color: var(--text-main);
+        }
+
+        .download-btn {
+            display: inline-block;
+            background-color: var(--accent-orange);
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 20px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 68, 0, 0.4);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-sub);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            section { padding: 30px; }
+            .container { padding: 15px; }
+        }
+
+        @media (max-width: 480px) {
+            header { padding: 40px 10px 30px; }
+            h1 { font-size: 1.8rem; letter-spacing: 1px; }
+            .subtitle { font-size: 1rem; }
+            
+            section { 
+                padding: 20px; 
+                border-left-width: 3px;
+            }
+            
+            h2 { font-size: 1.3rem; }
+            
+            .download-btn { 
+                display: block; 
+                width: 100%; 
+                box-sizing: border-box; 
+                text-align: center; 
+                padding: 15px 20px;
+            }
+            
+            .product-showcase { padding: 10px; }
+            .preset-grid { grid-template-columns: 1fr; }
+        }
+        
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .preset-card {
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            padding: 15px;
+        }
+
+        .preset-title {
+            font-weight: bold;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            border-bottom: 2px solid var(--accent-orange);
+            display: inline-block;
+            padding-bottom: 2px;
+        }
+
+        .preset-settings {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+        }
+
+        .preset-result {
+            margin-top: 8px;
+            font-style: italic;
+            font-size: 0.85rem;
+            color: #555;
+        }
+        
+        code {
+            background-color: #eee;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <header>
+            <h1>Jennyrave Ghost Trace Echo</h1>
+            <div class="accent-line"></div>
+            <div class="subtitle">Precision Delay. Lab Grade Saturation.</div>
+            
+            <a href="https://github.com/jennyrave-sys/Ghost_Trace_Echo/raw/refs/heads/main/Ghost%20Trace%20Echo.vst3.zip" class="download-btn">Download VST3 (Beta)</a>
+        </header>
+
+        <div class="product-showcase">
+            <img src="https://github.com/jennyrave-sys/Ghost_Trace_Echo/blob/main/jennyrave_echo.png?raw=true" alt="Jennyrave Ghost Trace Echo VST Interface">
+        </div>
+
+        <section>
+            <h2>What is Ghost Trace Echo?</h2>
+            <p>Jennyrave Ghost Trace Echo is a stereo delay plugin designed for the modern producer who demands both surgical precision and analog character. Unlike standard digital delays that sound sterile, or vintage emulations that are too muddy, Ghost Trace sits in the "Modern Lab" sweet spot.</p>
+            <p>It combines a crystal-clear stereo delay engine with a feedback loop that features "Tanh" saturation - a soft-clipping distortion that adds warmth and grit only to the repeats, keeping your original signal pristine.</p>
+        </section>
+
+        <section>
+            <h2>Why is Ghost Trace Different?</h2>
+            <h3>Inside-the-Loop Processing</h3>
+            <p>Many delays apply EQ or saturation after the delay. Ghost Trace applies it inside the feedback loop. This means the first repeat is slightly colored, the second is more colored, and the tenth is gritty and dark. This creates a natural, organic decay that mimics how sound behaves in the real world.</p>
+        </section>
+
+        <section>
+            <h2>Signal Flow Diagram</h2>
+            <p>Understanding the signal flow is key to mastering the Ghost Trace Echo. Unlike standard delays, the tone shaping happens <strong>inside</strong> the feedback loop.</p>
+            <p><code>Input -> [Delay Line] -> [Filter (Lo/Hi Cut)] -> [Saturation (Drive)] -> [Feedback Gain] -> Output</code></p>
+        </section>
+
+        <section>
+            <h2>Installation Guide</h2>
+            <p><strong>Format:</strong> VST3 Only (64-bit)<br>
+            <strong>Platform:</strong> Windows 10/11<br>
+            <strong>License:</strong> GPLv3 (Open Source)<br>
+            <strong>Status:</strong> Public Beta</p>
+            
+            <p>To install Jennyrave Ghost Trace Echo, simply place the <code>.vst3</code> file into your system's dedicated plugin folder.</p>
+            
+            <h3>Common Installation Paths</h3>
+            <ul>
+                <li><strong>Default System Folder:</strong> <code>C:\Program Files\Common Files\VST3</code></li>
+                <li><strong>Custom Folder:</strong> If you use a custom VST folder for your DAW (like Ableton Live or FL Studio), you can place the file there, but the system folder above is the industry standard.</li>
+            </ul>
+            <p>After moving the file, restart your DAW or click "Rescan Plugins" in your preferences.</p>
+        </section>
+
+        <section>
+            <h2>Control Breakdown</h2>
+            <p>The Ghost Trace interface is divided into three logical panels, following the signal flow from left to right.</p>
+
+            <h3>1. The Time Panel (Left)</h3>
+            <ul>
+                <li><strong>SYNC (LCD):</strong> Selects the rhythmic interval of the delay (1/32 to 1/1). Includes Triplet (t) and Dotted (.) modifiers.</li>
+                <li><strong>MODE (LCD):</strong>
+                    <div style="margin-left: 0px; margin-top: 5px;">
+                        <div><strong>Single:</strong> Standard mono delay.</div>
+                        <div><strong>Dual:</strong> Offset timing for stereo width.</div>
+                        <div><strong>Ping-Pong:</strong> Bounces repeats between left and right.</div>
+                    </div>
+                </li>
+                <li><strong>FDBK (Feedback):</strong> Controls repeats. 100% creates infinite loops.</li>
+            </ul>
+
+            <h3>2. The Tone Panel (Center)</h3>
+            <p>Controls strictly affect the wet signal (echoes).</p>
+            <ul>
+                <li><strong>LO-CUT:</strong> High-Pass filter to remove mud.</li>
+                <li><strong>DRIVE:</strong> Introduces soft-clipping saturation. High settings create gritty textures that degrade with every repeat.</li>
+                <li><strong>HI-CUT:</strong> Low-Pass filter to make echoes sound darker and more distant.</li>
+            </ul>
+
+            <h3>3. The Output Panel (Right)</h3>
+            <ul>
+                <li><strong>DRY/WET:</strong> The mix blend. 100% is essential for Send/Return setups.</li>
+                <li><strong>OUT (Fader):</strong> Master volume fader for gain-staging.</li>
+                <li><strong>LVL (Meter):</strong> Visual VU meter showing real-time signal strength.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Cookbook</h2>
+            <p>A curated list of settings to get you started instantly.</p>
+
+            <h3>Essentials & Classics</h3>
+            <div class="preset-grid">
+                <div class="preset-card">
+                    <div class="preset-title">1. The Dub Chord</div>
+                    <div class="preset-settings">Sync: 1/8 dot | Mode: Ping-Pong | Fdbk: 75% | Lo-Cut: 300Hz | Drive: 40%</div>
+                    <div class="preset-result">Spaced out, gritty chords that don't muddy the low end.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">2. Slapback Vocal</div>
+                    <div class="preset-settings">Sync: 1/32 | Mode: Single | Fdbk: 0% | Mix: 30%</div>
+                    <div class="preset-result">Instant thickness and presence for vocals without obvious echo.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">3. Broken Tape Machine</div>
+                    <div class="preset-settings">Sync: 1/4 | Fdbk: 90% | Drive: 85% | Hi-Cut: 1.5kHz</div>
+                    <div class="preset-result">Dark, distorted textures that degrade rapidly.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">4. The Stereo Widener</div>
+                    <div class="preset-settings">Sync: 1/16 | Mode: Dual | Fdbk: 20% | Lo-Cut: 200Hz | Mix: 40%</div>
+                    <div class="preset-result">Makes mono synths sound massive and wide without cluttering the center.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">5. Dotted 8th Guitar</div>
+                    <div class="preset-settings">Sync: 1/8 dot | Mode: Single | Fdbk: 40% | Drive: 10%</div>
+                    <div class="preset-result">The classic stadium rock rhythmic delay.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">6. Industrial Slap</div>
+                    <div class="preset-settings">Sync: 1/32 | Mode: Single | Fdbk: 60% | Drive: 100% | Hi-Cut: 4kHz</div>
+                    <div class="preset-result">A short, metallic, aggressively distorted room sound.</div>
+                </div>
+            </div>
+
+            <h3>Vocals & Dialog</h3>
+            <div class="preset-grid">
+                <div class="preset-card">
+                    <div class="preset-title">7. Lead Vocal Throw</div>
+                    <div class="preset-settings">Sync: 1/4 | Mode: Ping-Pong | Fdbk: 40% | Hi-Cut: 5kHz</div>
+                    <div class="preset-result">Classic pop/rap delay throws that bounce around the stereo field.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">8. Telephone Echo</div>
+                    <div class="preset-settings">Sync: 1/8 | Mode: Single | Lo-Cut: 500Hz | Hi-Cut: 2kHz | Drive: 60%</div>
+                    <div class="preset-result">Narrow bandwidth repeats like a phone line.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">9. Dream Pop Wash</div>
+                    <div class="preset-settings">Sync: 1/2 | Mode: Dual | Fdbk: 80% | Hi-Cut: 1kHz | Mix: 45%</div>
+                    <div class="preset-result">Creates a hazy background texture behind breathy vocals.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">10. Rap Ad-Lib Fattener</div>
+                    <div class="preset-settings">Sync: 1/16 | Mode: Dual | Fdbk: 10% | Drive: 30%</div>
+                    <div class="preset-result">Makes short vocal stabs sound huge and aggressive.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">11. Whisper Trail</div>
+                    <div class="preset-settings">Sync: 1/4 dot | Mode: Ping-Pong | Fdbk: 65% | Hi-Cut: 800Hz</div>
+                    <div class="preset-result">Dark, mysterious repeats that disappear into the shadows.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">12. Robot Repeater</div>
+                    <div class="preset-settings">Sync: 1/32 | Mode: Single | Fdbk: 85% | Drive: 10%</div>
+                    <div class="preset-result">Short, metallic ringing that creates a robotic vocoder-like texture.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">13. Chorus-y Vocal</div>
+                    <div class="preset-settings">Sync: 1/32 t | Mode: Dual | Fdbk: 25% | Mix: 35%</div>
+                    <div class="preset-result">A pseudo-chorus effect due to the timing offset in Dual mode.</div>
+                </div>
+            </div>
+
+            <h3>Drums & Percussion</h3>
+            <div class="preset-grid">
+                <div class="preset-card">
+                    <div class="preset-title">14. Techno Rumble</div>
+                    <div class="preset-settings">Sync: 1/8 | Mode: Single | Fdbk: 80% | Lo-Cut: 100Hz | Hi-Cut: 300Hz | Mix: 50%</div>
+                    <div class="preset-result">Put this on a kick drum to create a rolling, dark sub-bass rhythm.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">15. Snare Splash</div>
+                    <div class="preset-settings">Sync: 1/16 | Mode: Ping-Pong | Fdbk: 30% | Hi-Cut: 12kHz</div>
+                    <div class="preset-result">Adds high-frequency excitement and width to snare hits.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">16. Hi-Hat Shuffler</div>
+                    <div class="preset-settings">Sync: 1/16 t | Mode: Dual | Fdbk: 40%</div>
+                    <div class="preset-result">Turns straight 16th note hi-hats into a swinging groove.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">17. Reggae Snare</div>
+                    <div class="preset-settings">Sync: 1/8 trip | Mode: Single | Fdbk: 85% | Hi-Cut: 3kHz | Drive: 50%</div>
+                    <div class="preset-result">Dirty, triplet-based delay characteristic of classic Dub/Reggae.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">18. Industrial Percussion</div>
+                    <div class="preset-settings">Sync: 1/32 | Mode: Single | Fdbk: 70% | Drive: 100%</div>
+                    <div class="preset-result">Turns any percussive sound into a metallic clank.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">19. Breakbeat Filler</div>
+                    <div class="preset-settings">Sync: 1/8 dot | Mode: Ping-Pong | Fdbk: 50%</div>
+                    <div class="preset-result">Fills the gaps in a slow breakbeat with rhythmic movement.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">20. Ghost Kick</div>
+                    <div class="preset-settings">Sync: 1/4 | Mode: Single | Lo-Cut: 400Hz | Drive: 20%</div>
+                    <div class="preset-result">Adds a rhythmic pulse behind the main kick without muddying the sub.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">21. Trap Roll Helper</div>
+                    <div class="preset-settings">Sync: 1/32 t | Mode: Dual | Fdbk: 60%</div>
+                    <div class="preset-result">Creates rapid-fire triplet rolls from single snare hits.</div>
+                </div>
+            </div>
+
+            <h3>Synths & Keys</h3>
+            <div class="preset-grid">
+                <div class="preset-card">
+                    <div class="preset-title">22. Blade Runner Blues</div>
+                    <div class="preset-settings">Sync: 1/2 dot | Mode: Dual | Fdbk: 75% | Hi-Cut: 2.5kHz | Mix: 40%</div>
+                    <div class="preset-result">Massive, cinematic Vangelis-style delay for analog leads.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">23. Arp Complexifier</div>
+                    <div class="preset-settings">Sync: 1/8 dot | Mode: Ping-Pong | Fdbk: 50%</div>
+                    <div class="preset-result">Turns a simple 1/8th note arpeggio into a complex polyrhythm.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">24. Lo-Fi Keys</div>
+                    <div class="preset-settings">Sync: 1/4 | Mode: Single | Fdbk: 60% | Drive: 70% | Hi-Cut: 800Hz</div>
+                    <div class="preset-result">Makes clean piano samples sound like they are on a dusty cassette tape.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">25. Acid Line Follower</div>
+                    <div class="preset-settings">Sync: 1/16 | Mode: Single | Fdbk: 40% | Drive: 90%</div>
+                    <div class="preset-result">Adds distorted ghost notes to 303-style acid basslines.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">26. Organ Swell</div>
+                    <div class="preset-settings">Sync: 1/1 | Mode: Dual | Fdbk: 70% | Mix: 50%</div>
+                    <div class="preset-result">Long, church-like decay for organ chords.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">27. Pluck Enhancer</div>
+                    <div class="preset-settings">Sync: 1/8 | Mode: Ping-Pong | Fdbk: 35% | Lo-Cut: 500Hz</div>
+                    <div class="preset-result">Keeps short synth plucks bouncing around without clogging the mix.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">28. Chiptune Echo</div>
+                    <div class="preset-settings">Sync: 1/32 | Mode: Single | Fdbk: 0% | Drive: 100%</div>
+                    <div class="preset-result">Hard clipping on a short delay creates a bitcrushed artifact sound.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">29. Pad Freezer</div>
+                    <div class="preset-settings">Sync: 1/1 | Mode: Dual | Fdbk: 95% | Hi-Cut: 500Hz</div>
+                    <div class="preset-result">Near-infinite loop that creates a drone bed under moving chords.</div>
+                </div>
+            </div>
+
+            <h3>Guitars & Bass</h3>
+            <div class="preset-grid">
+                <div class="preset-card">
+                    <div class="preset-title">30. Surf Rock Slap</div>
+                    <div class="preset-settings">Sync: 1/16 | Mode: Single | Fdbk: 20% | Hi-Cut: 4kHz</div>
+                    <div class="preset-result">Classic 50s/60s spring reverb emulation vibe.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">31. Solo Mountain</div>
+                    <div class="preset-settings">Sync: 1/4 dot | Mode: Dual | Fdbk: 60% | Mix: 35%</div>
+                    <div class="preset-result">Huge, stadium-sized lead guitar tone.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">32. Bass Groove</div>
+                    <div class="preset-settings">Sync: 1/8 | Mode: Single | Lo-Cut: 300Hz | Mix: 15%</div>
+                    <div class="preset-result">Adds rhythmic interest to basslines while keeping the low-end mono and tight.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">33. Shoegaze Wall</div>
+                    <div class="preset-settings">Sync: 1/4 | Mode: Dual | Fdbk: 90% | Drive: 60% | Mix: 50%</div>
+                    <div class="preset-result">Distorted, washing wall of sound for volume swells.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">34. Clean Funk</div>
+                    <div class="preset-settings">Sync: 1/16 | Mode: Single | Fdbk: 10%</div>
+                    <div class="preset-result">Tightens up muted funk guitar strums.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">35. Ambient Swell</div>
+                    <div class="preset-settings">Sync: 1/1 | Mode: Ping-Pong | Fdbk: 80% | Hi-Cut: 1kHz</div>
+                    <div class="preset-result">For volume knob swells, creates a trailing atmosphere.</div>
+                </div>
+            </div>
+
+            <h3>Experimental & FX</h3>
+            <div class="preset-grid">
+                <div class="preset-card">
+                    <div class="preset-title">36. The Feedback Loop</div>
+                    <div class="preset-settings">Sync: 1/16 | Fdbk: 100% | Drive: 10% | Mix: 100%</div>
+                    <div class="preset-result">Creates a self-oscillating loop. Play with the Hi-Cut knob.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">37. Metallic Room</div>
+                    <div class="preset-settings">Sync: 1/32 t | Mode: Dual | Fdbk: 75% | Lo-Cut: 1kHz</div>
+                    <div class="preset-result">Simulates standing inside a large metal tank.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">38. Horror Sting</div>
+                    <div class="preset-settings">Sync: 1/2 | Mode: Ping-Pong | Fdbk: 90% | Drive: 100% | Lo-Cut: 500Hz</div>
+                    <div class="preset-result">Distorted, scary repeats that last forever.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">39. Transitions Riser</div>
+                    <div class="preset-settings">Sync: 1/8 | Fdbk: 95% | Hi-Cut: Start at 500Hz, automate to 20kHz</div>
+                    <div class="preset-result">Automate the Hi-Cut knob up to create a riser effect.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">40. Pseudo-Reverb</div>
+                    <div class="preset-settings">Sync: 1/32 | Mode: Dual | Fdbk: 60% | Hi-Cut: 2kHz</div>
+                    <div class="preset-result">A grainy, low-fidelity room reverb substitute.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">41. Laser Zap</div>
+                    <div class="preset-settings">Sync: 1/32 | Mode: Single | Fdbk: 80% | Drive: 80%</div>
+                    <div class="preset-result">Feed it a short click, and the high drive creates a laser-like decay.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">42. Underwater</div>
+                    <div class="preset-settings">Sync: 1/4 | Mode: Dual | Hi-Cut: 400Hz | Mix: 60%</div>
+                    <div class="preset-result">Everything sounds submerged and murky.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">43. Broken Radio</div>
+                    <div class="preset-settings">Sync: 1/16 | Lo-Cut: 1kHz | Hi-Cut: 3kHz | Drive: 70%</div>
+                    <div class="preset-result">Band-passed, distorted repeats.</div>
+                </div>
+            </div>
+
+            <h3>Utility</h3>
+            <div class="preset-grid">
+                <div class="preset-card">
+                    <div class="preset-title">44. Haas Effect</div>
+                    <div class="preset-settings">Sync: 1/32 | Mode: Dual | Fdbk: 0% | Mix: 50%</div>
+                    <div class="preset-result">Extreme stereo widening by delaying one ear slightly.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">45. Subtle Width</div>
+                    <div class="preset-settings">Sync: 1/32 | Mode: Dual | Fdbk: 0% | Mix: 15%</div>
+                    <div class="preset-result">Just barely makes a mono source feel stereo.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">46. Rhythm Check</div>
+                    <div class="preset-settings">Sync: 1/4 | Mode: Single | Fdbk: 0% | Mix: 100%</div>
+                    <div class="preset-result">Moves the audio exactly one beat later.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">47. Mono Check</div>
+                    <div class="preset-settings">Sync: 1/16 | Mode: Single | Mix: 100%</div>
+                    <div class="preset-result">Forces the output to mono.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">48. High Pass Utility</div>
+                    <div class="preset-settings">Sync: 1/32 | Fdbk: 0% | Lo-Cut: Adjust to taste | Mix: 100%</div>
+                    <div class="preset-result">Uses the delay engine purely as a High Pass filter.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">49. Saturation Box</div>
+                    <div class="preset-settings">Sync: 1/32 | Fdbk: 0% | Drive: Adjust to taste | Mix: 100%</div>
+                    <div class="preset-result">Uses the plugin purely as a distortion unit.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">50. Safety Limiter</div>
+                    <div class="preset-settings">Sync: 1/32 | Fdbk: 0% | Drive: 20% | Mix: 100%</div>
+                    <div class="preset-result">Soft clipping acts as a gentle limiter/compressor.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">51. Ping-Pong Panner</div>
+                    <div class="preset-settings">Sync: 1/2 | Mode: Ping-Pong | Fdbk: 0% | Mix: 100%</div>
+                    <div class="preset-result">Hard pans the audio to the opposite side after a delay.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">52. Texture Noise</div>
+                    <div class="preset-settings">Input: White Noise | Sync: 1/8 | Fdbk: 90% | Drive: 50%</div>
+                    <div class="preset-result">Generates a rhythmic noise floor for lo-fi tracks.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">53. Click Track</div>
+                    <div class="preset-settings">Input: Single impulse | Sync: 1/4 | Fdbk: 100%</div>
+                    <div class="preset-result">Creates a metronome click from a single sound.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">54. Pre-Delay for Reverb</div>
+                    <div class="preset-settings">Sync: 1/16 or 1/32 | Mix: 100%</div>
+                    <div class="preset-result">Separate reverb from dry vocal.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">55. Sidechain Trigger</div>
+                    <div class="preset-settings">Sync: 1/4 | Mix: 100% | Hi-Cut: 200Hz</div>
+                    <div class="preset-result">Creates a ghostly low-end thud to trigger sidechain.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">56. The Ghost Trace</div>
+                    <div class="preset-settings">Sync: 1/4 dot | Mode: Dual | Fdbk: 70% | Lo-Cut: 400Hz | Drive: 45%</div>
+                    <div class="preset-result">Signature Sound: Present but distant, warm but digital.</div>
+                </div>
+            </div>
+
+            <h3>Vintage & Lo-Fi</h3>
+            <div class="preset-grid">
+                <div class="preset-card">
+                    <div class="preset-title">57. Dusty Attic</div>
+                    <div class="preset-settings">Sync: 1/2 | Mode: Single | Lo-Cut: 300Hz | Hi-Cut: 800Hz | Drive: 35%</div>
+                    <div class="preset-result">Extremely narrow bandwidth, sounds like a forgotten memory.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">58. Crushed Cassette</div>
+                    <div class="preset-settings">Sync: 1/8 | Drive: 95% | Hi-Cut: 2kHz</div>
+                    <div class="preset-result">Heavy distortion that sounds like a tape deck eating the ribbon.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">59. AM Radio Echo</div>
+                    <div class="preset-settings">Sync: 1/4 | Lo-Cut: 1kHz | Hi-Cut: 4kHz | Mix: 30%</div>
+                    <div class="preset-result">Thin, tinny repeats typical of AM broadcasts.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">60. Tube Preamp</div>
+                    <div class="preset-settings">Sync: 1/32 | Fdbk: 0% | Drive: 60% | Mix: 100%</div>
+                    <div class="preset-result">Uses the drive circuit to warm up cold digital synths.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">61. Warble Simulation</div>
+                    <div class="preset-settings">Sync: 1/16 | Mode: Dual | Fdbk: 40% | Hi-Cut: 1kHz</div>
+                    <div class="preset-result">The offset in dual mode plus filtering simulates tape flutter.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">62. Vintage Slap</div>
+                    <div class="preset-settings">Sync: 1/16 | Mode: Single | Drive: 40% | Hi-Cut: 3kHz</div>
+                    <div class="preset-result">50s style slapback with valve saturation.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">63. Dark Dub</div>
+                    <div class="preset-settings">Sync: 1/8 dot | Mode: Single | Fdbk: 90% | Hi-Cut: 400Hz</div>
+                    <div class="preset-result">Repeats are felt more than heard (sub-bass territory).</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">64. Bright Tape</div>
+                    <div class="preset-settings">Sync: 1/4 | Mode: Dual | Drive: 50% | Lo-Cut: 800Hz</div>
+                    <div class="preset-result">Saturated but shimmery, cuts through a dense mix.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">65. Resonant Chamber</div>
+                    <div class="preset-settings">Sync: 1/32 t | Mode: Ping-Pong | Fdbk: 80%</div>
+                    <div class="preset-result">Short, metallic ringing similar to a small tiled room.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">66. Old Speaker</div>
+                    <div class="preset-settings">Sync: 1/8 | Lo-Cut: 500Hz | Hi-Cut: 1kHz | Drive: 80%</div>
+                    <div class="preset-result">Mid-range focused distortion.</div>
+                </div>
+            </div>
+
+            <h3>Sci-Fi & FX</h3>
+            <div class="preset-grid">
+                <div class="preset-card">
+                    <div class="preset-title">67. Space Station Alarm</div>
+                    <div class="preset-settings">Input: Short beep | Sync: 1/16 | Fdbk: 95% | Mode: Ping-Pong</div>
+                    <div class="preset-result">Urgent, panning alarm sound.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">68. Alien Voice</div>
+                    <div class="preset-settings">Sync: 1/32 | Mode: Dual | Drive: 20% | Mix: 50%</div>
+                    <div class="preset-result">Comb filtering creates a robotic vocal texture.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">69. Black Hole</div>
+                    <div class="preset-settings">Sync: 1/1 | Fdbk: 99% | Hi-Cut: 200Hz | Drive: 90%</div>
+                    <div class="preset-result">Sound enters and never leaves, slowly degrading into a rumble.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">70. Laser Battle</div>
+                    <div class="preset-settings">Sync: 1/16 t | Mode: Ping-Pong | Drive: 100% | Hi-Cut: Open</div>
+                    <div class="preset-result">Sharp, piercing zaps bouncing across the stereo field.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">71. Warp Drive</div>
+                    <div class="preset-settings">Sync: 1/32 | Fdbk: 90% | Automate: Sweep Sync 1/32 to 1/1</div>
+                    <div class="preset-result">Pitch-shifting artifacts.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">72. Computer Malfunction</div>
+                    <div class="preset-settings">Sync: 1/32 t | Mode: Dual | Drive: 100% | Mix: 20%</div>
+                    <div class="preset-result">Glitchy background artifacting.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">73. Scanner</div>
+                    <div class="preset-settings">Sync: 1/8 | Mode: Ping-Pong | Lo-Cut: 2kHz</div>
+                    <div class="preset-result">Searching, panning high-frequency blips.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">74. Drone Generator</div>
+                    <div class="preset-settings">Input: Silence | Fdbk: 100% | Drive: 100%</div>
+                    <div class="preset-result">Ideally creates noise floor oscillation (requires input noise).</div>
+                </div>
+            </div>
+
+            <h3>Rhythmic Patterns</h3>
+            <div class="preset-grid">
+                <div class="preset-card">
+                    <div class="preset-title">75. Galloping Bass</div>
+                    <div class="preset-settings">Sync: 1/8 dot | Mix: 20%</div>
+                    <div class="preset-result">Adds momentum to simple 8th note basslines.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">76. Polyrhythm 3/4</div>
+                    <div class="preset-settings">Sync: 1/4 t | Mode: Single</div>
+                    <div class="preset-result">Creates triplets over a 4/4 beat.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">77. Polyrhythm 3/2</div>
+                    <div class="preset-settings">Sync: 1/2 t | Mode: Single</div>
+                    <div class="preset-result">Slower triplet feel.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">78. Trap Hi-Hats</div>
+                    <div class="preset-settings">Sync: 1/32 t | Fdbk: 40%</div>
+                    <div class="preset-result">Instant rolling hi-hats from quarter notes.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">79. Swing Enhancer</div>
+                    <div class="preset-settings">Sync: 1/16 t | Mode: Dual | Mix: 25%</div>
+                    <div class="preset-result">Adds a shuffle feel to straight beats.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">80. Marching Snare</div>
+                    <div class="preset-settings">Sync: 1/8 | Mode: Ping-Pong | Fdbk: 60%</div>
+                    <div class="preset-result">Strict left-right marching cadence.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">81. Double Time</div>
+                    <div class="preset-settings">Sync: 1/16 (on 1/8 source) | Mix: 50%</div>
+                    <div class="preset-result">Effectively doubles the speed of a melody.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">82. Half Time</div>
+                    <div class="preset-settings">Sync: 1/2 | Mix: 50%</div>
+                    <div class="preset-result">Adds a half-time counter-melody.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">83. Flam Maker</div>
+                    <div class="preset-settings">Sync: 1/32 | Fdbk: 0% | Mix: 40%</div>
+                    <div class="preset-result">Thickens drum hits with a "flam" effect.</div>
+                </div>
+            </div>
+
+            <h3>Mixing Tools</h3>
+            <div class="preset-grid">
+                <div class="preset-card">
+                    <div class="preset-title">84. Vocal Thickener</div>
+                    <div class="preset-settings">Sync: 1/32 | Mode: Dual | Mix: 20%</div>
+                    <div class="preset-result">Subtle stereo widening for lead vocals.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">85. Guitar Solo Space</div>
+                    <div class="preset-settings">Sync: 1/4 | Mode: Ping-Pong | Hi-Cut: 3kHz | Mix: 25%</div>
+                    <div class="preset-result">Adds space without conflicting with the center channel.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">86. Background Synth</div>
+                    <div class="preset-settings">Sync: 1/2 | Hi-Cut: 800Hz | Mix: 40%</div>
+                    <div class="preset-result">Pushes a bright synth into the background.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">87. Mono to Stereo</div>
+                    <div class="preset-settings">Sync: 1/32 | Mode: Dual | Mix: 50%</div>
+                    <div class="preset-result">Converts a mono recording into a pseudo-stereo signal.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">88. Distance Simulator</div>
+                    <div class="preset-settings">Sync: 1/16 | Mix: 100% | Hi-Cut: 2kHz</div>
+                    <div class="preset-result">Makes a sound appear far away.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">89. Subtle Saturation</div>
+                    <div class="preset-settings">Sync: 1/32 | Fdbk: 0% | Drive: 15% | Mix: 100%</div>
+                    <div class="preset-result">Just adds harmonic richness.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">90. Mix Glue</div>
+                    <div class="preset-settings">Sync: 1/8 | Fdbk: 10% | Hi-Cut: 500Hz | Mix: 5%</div>
+                    <div class="preset-result">Barely audible, adds "air" and cohesion to a bus.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">91. Brightener</div>
+                    <div class="preset-settings">Sync: 1/32 | Lo-Cut: 5kHz | Drive: 50% | Mix: 20%</div>
+                    <div class="preset-result">Adds high-end shimmer/distortion (exciter effect).</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">92. Mud Remover</div>
+                    <div class="preset-settings">Sync: 1/4 | Lo-Cut: 600Hz | Mix: 30%</div>
+                    <div class="preset-result">Delay that stays completely out of the bass range.</div>
+                </div>
+            </div>
+
+            <h3>The Final 8</h3>
+            <div class="preset-grid">
+                <div class="preset-card">
+                    <div class="preset-title">93. Ghost Train</div>
+                    <div class="preset-settings">Sync: 1/2 t | Mode: Dual | Drive: 80% | Lo-Cut: 200Hz</div>
+                    <div class="preset-result">A chugging, rhythmic industrial texture.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">94. Ping-Pong Madness</div>
+                    <div class="preset-settings">Sync: 1/32 | Mode: Ping-Pong | Fdbk: 90%</div>
+                    <div class="preset-result">Extremely fast stereo switching, disorienting with headphones.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">95. Deep Space</div>
+                    <div class="preset-settings">Sync: 1/1 | Mode: Single | Hi-Cut: 400Hz | Fdbk: 80%</div>
+                    <div class="preset-result">Only the lowest frequencies repeat, sounding like a distant ship.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">96. Telephone Operator</div>
+                    <div class="preset-settings">Sync: 1/8 | Drive: 60% | Lo-Cut: 1kHz | Hi-Cut: 3kHz</div>
+                    <div class="preset-result">Band-passed distortion loop.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">97. Glitch Stutter</div>
+                    <div class="preset-settings">Sync: 1/32 t | Fdbk: 0% | Mix: 100% (Automate on/off)</div>
+                    <div class="preset-result">Instant stutter effect for EDM drops.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">98. Slow Motion</div>
+                    <div class="preset-settings">Sync: 1/1 dot | Mode: Dual | Fdbk: 50%</div>
+                    <div class="preset-result">Very long, dragging echoes for down-tempo music.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">99. Freeze Frame</div>
+                    <div class="preset-settings">Sync: 1/32 | Fdbk: 100% (Self-Oscillation) | Drive: 0%</div>
+                    <div class="preset-result">Short metallic ring that holds forever.</div>
+                </div>
+                <div class="preset-card">
+                    <div class="preset-title">100. The Century Echo</div>
+                    <div class="preset-settings">Sync: 1/4 | Mode: Ping-Pong | Fdbk: 100% | Drive: 20% | Lo-Cut: 300Hz | Hi-Cut: 3kHz</div>
+                    <div class="preset-result">The ultimate infinite loop. Balanced EQ means it goes on forever without building up mud.</div>
+                </div>
+            </div>
+
+        </section>
+
+        <footer>
+            &copy; 2025 Jennyrave. Released under GPLv3 License.
+        </footer>
+
+    </div>
+
+</body>
+</html>
