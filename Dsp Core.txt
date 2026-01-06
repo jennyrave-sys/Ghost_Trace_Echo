@@ -1,0 +1,179 @@
+#include <vector>
+#include <cmath>
+#include <algorithm>
+#include <atomic>
+
+const float PI = 3.14159265358979323846f;
+
+struct Smoother {
+    float currentValue = 0.0f;
+    float targetValue = 0.0f;
+    float coeff = 0.0f;
+
+    void reset(float sampleRate, float rampTimeSeconds) {
+        currentValue = targetValue;
+        coeff = 1.0f - std::exp(-1.0f / (sampleRate * rampTimeSeconds)); 
+    }
+
+    void setTarget(float target) {
+        targetValue = target;
+    }
+
+    float next() {
+        currentValue += (targetValue - currentValue) * coeff;
+        return currentValue;
+    }
+};
+
+struct TPTFilter {
+    float s1 = 0.0f, s2 = 0.0f; 
+    float g = 0.0f, R2 = 0.0f;  
+    float sampleRate = 44100.0f;
+    
+    enum Type { LowPass, HighPass };
+    Type type = LowPass;
+
+    void init(float sr, Type t) {
+        sampleRate = sr;
+        type = t;
+        s1 = s2 = 0.0f;
+        R2 = 1.0f / 0.7071f; 
+    }
+
+    void setCutoff(float frequency) {
+        g = std::tan(PI * frequency / sampleRate);
+    }
+
+    float process(float x) {
+        float hp = (x - (R2 + g) * s1 - s2) / (1.0f + R2 * g + g * g);
+        float bp = g * hp + s1;
+        float lp = g * bp + s2;
+        
+        s1 = g * hp + bp; 
+        s2 = g * bp + lp;
+
+        if (type == LowPass) return lp;
+        return hp;
+    }
+};
+
+inline float dbToGain(float db) {
+    return std::pow(10.0f, db / 20.0f);
+}
+
+class GhostTraceDSP {
+public:
+    std::vector<float> delayBufferL;
+    std::vector<float> delayBufferR;
+    int writePos = 0;
+    int bufferSize = 0;
+    float sampleRate = 44100.0f;
+
+    Smoother delayTimeL, delayTimeR;
+    TPTFilter loCutL, loCutR;
+    TPTFilter hiCutL, hiCutR;
+    
+    std::atomic<float> currentRMS { 0.0f };
+
+    void init(float sr) {
+        sampleRate = sr;
+        
+        bufferSize = (int)(sr * 4.0f);
+        delayBufferL.assign(bufferSize, 0.0f);
+        delayBufferR.assign(bufferSize, 0.0f);
+        writePos = 0;
+
+        delayTimeL.reset(sr, 0.05f);
+        delayTimeR.reset(sr, 0.05f);
+
+        loCutL.init(sr, TPTFilter::HighPass);
+        loCutR.init(sr, TPTFilter::HighPass);
+        hiCutL.init(sr, TPTFilter::LowPass);
+        hiCutR.init(sr, TPTFilter::LowPass);
+    }
+
+    void processBlock(float* leftCh, float* rightCh, int numSamples, 
+                      float feedback, float driveDb, float mix, float outputDb,
+                      float loFreq, float hiFreq, 
+                      float targetTimeS, int mode) 
+    {
+        float targetL = targetTimeS * sampleRate;
+        float targetR = targetL;
+
+        if (mode == 1) { 
+            targetR = targetL * 0.75f; 
+        }
+
+        delayTimeL.setTarget(targetL);
+        delayTimeR.setTarget(targetR);
+
+        loCutL.setCutoff(loFreq); loCutR.setCutoff(loFreq);
+        hiCutL.setCutoff(hiFreq); hiCutR.setCutoff(hiFreq);
+        
+        float driveGain = dbToGain(driveDb);
+        float outGain   = dbToGain(outputDb);
+
+        float sumSquared = 0.0f;
+
+        for (int i = 0; i < numSamples; ++i) {
+            float inL = leftCh[i];
+            float inR = rightCh[i];
+
+            float dtL = delayTimeL.next();
+            float dtR = delayTimeR.next();
+
+            float readPtrL = (float)writePos - dtL;
+            while(readPtrL < 0) readPtrL += bufferSize;
+            int idxL_A = (int)readPtrL;
+            int idxL_B = (idxL_A + 1) % bufferSize;
+            float fracL = readPtrL - idxL_A;
+            float wetL = delayBufferL[idxL_A] * (1.0f - fracL) + delayBufferL[idxL_B] * fracL;
+
+            float readPtrR = (float)writePos - dtR;
+            while(readPtrR < 0) readPtrR += bufferSize;
+            int idxR_A = (int)readPtrR;
+            int idxR_B = (idxR_A + 1) % bufferSize;
+            float fracR = readPtrR - idxR_A;
+            float wetR = delayBufferR[idxR_A] * (1.0f - fracR) + delayBufferR[idxR_B] * fracR;
+
+            float fbL = wetL;
+            float fbR = wetR;
+
+            fbL = loCutL.process(fbL); fbL = hiCutL.process(fbL);
+            fbR = loCutR.process(fbR); fbR = hiCutR.process(fbR);
+
+            if (driveGain > 1.0f) {
+                fbL = std::tanh(fbL * driveGain) / std::tanh(driveGain);
+                fbR = std::tanh(fbR * driveGain) / std::tanh(driveGain);
+            }
+
+            fbL *= feedback;
+            fbR *= feedback;
+
+            float writeL = inL + fbL;
+            float writeR = inR + fbR;
+
+            if (mode == 2) { 
+                writeL = inL + fbR;
+                writeR = inR + fbL;
+            }
+
+            delayBufferL[writePos] = writeL;
+            delayBufferR[writePos] = writeR;
+
+            writePos++;
+            if (writePos >= bufferSize) writePos = 0;
+
+            float outL = (inL * (1.0f - mix) + wetL * mix) * outGain;
+            float outR = (inR * (1.0f - mix) + wetR * mix) * outGain;
+
+            leftCh[i] = outL;
+            rightCh[i] = outR;
+
+            sumSquared += (outL * outL + outR * outR) * 0.5f;
+        }
+
+        float rms = std::sqrt(sumSquared / (float)numSamples);
+        currentRMS.store(rms);
+    }
+};
